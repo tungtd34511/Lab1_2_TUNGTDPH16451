@@ -4,14 +4,16 @@ using DataAcessLayer.NewFolder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAcessLayer.Migrations
 {
     [DbContext(typeof(QLBHContext))]
-    partial class QLBHContextModelSnapshot : ModelSnapshot
+    [Migration("20220919085216_BH2")]
+    partial class BH2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +28,9 @@ namespace DataAcessLayer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("IdKhachHang")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("KhachHangId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Ma")
@@ -51,7 +56,7 @@ namespace DataAcessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdKhachHang");
+                    b.HasIndex("KhachHangId");
 
                     b.ToTable("HoaDon");
                 });
@@ -110,9 +115,17 @@ namespace DataAcessLayer.Migrations
                     b.Property<Guid>("IdSanPham")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("KhoHangId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SanPhamId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("IdKhoHang", "IdSanPham");
 
-                    b.HasIndex("IdSanPham");
+                    b.HasIndex("KhoHangId");
+
+                    b.HasIndex("SanPhamId");
 
                     b.ToTable("KHOHANGSANPHAM");
                 });
@@ -148,9 +161,17 @@ namespace DataAcessLayer.Migrations
                     b.Property<Guid>("IdHoaDon")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("HoaDonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SanPhamId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("IdSanPham", "IdHoaDon");
 
-                    b.HasIndex("IdHoaDon");
+                    b.HasIndex("HoaDonId");
+
+                    b.HasIndex("SanPhamId");
 
                     b.ToTable("SANPHAMHOADON");
                 });
@@ -159,9 +180,7 @@ namespace DataAcessLayer.Migrations
                 {
                     b.HasOne("DataAcessLayer.DomainClass.KhachHang", "KhachHang")
                         .WithMany("HoaDons")
-                        .HasForeignKey("IdKhachHang")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KhachHangId");
 
                     b.Navigation("KhachHang");
                 });
@@ -170,15 +189,11 @@ namespace DataAcessLayer.Migrations
                 {
                     b.HasOne("DataAcessLayer.DomainClass.KhoHang", "KhoHang")
                         .WithMany("KhoHangSanPhams")
-                        .HasForeignKey("IdKhoHang")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KhoHangId");
 
                     b.HasOne("DataAcessLayer.DomainClass.SanPham", "SanPham")
                         .WithMany("KhoHangSanPhams")
-                        .HasForeignKey("IdSanPham")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SanPhamId");
 
                     b.Navigation("KhoHang");
 
@@ -189,15 +204,11 @@ namespace DataAcessLayer.Migrations
                 {
                     b.HasOne("DataAcessLayer.DomainClass.HoaDon", "HoaDon")
                         .WithMany("SanPhamHoaDons")
-                        .HasForeignKey("IdHoaDon")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HoaDonId");
 
                     b.HasOne("DataAcessLayer.DomainClass.SanPham", "SanPham")
                         .WithMany("SanPhamHoaDons")
-                        .HasForeignKey("IdSanPham")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SanPhamId");
 
                     b.Navigation("HoaDon");
 
